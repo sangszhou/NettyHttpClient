@@ -1,5 +1,7 @@
 package common
 
+import io.netty.handler.codec.http.{HttpRequest, HttpResponse}
+
 import scala.concurrent.Future
 
 
@@ -10,6 +12,6 @@ trait Connection {
   def disconnect: Future[Connection]
   def connect: Future[Connection]
   def isConnect: Boolean
-  def sendQuery(query: String): Future[String]
+  def sendQuery(query: HttpRequest): Future[HttpResponse]
 }
 
