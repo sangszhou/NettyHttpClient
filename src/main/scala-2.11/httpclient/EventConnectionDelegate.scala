@@ -1,12 +1,13 @@
 package httpclient
 
 import io.netty.channel.ChannelHandlerContext
+import io.netty.handler.codec.http.HttpResponse
 
 /**
   * Created by xinszhou on 6/14/16.
   */
 trait EventConnectionDelegate {
   def connected(ctx : ChannelHandlerContext )
-  def onMessageReceived(result: String)
+  def onMessageReceived(result: HttpResponse)
   def exceptionCaught( exception : Throwable )
 }

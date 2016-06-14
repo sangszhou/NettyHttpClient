@@ -12,6 +12,7 @@ val specs2Dependency = "org.specs2" %% "specs2-core" % specs2Version % "test"
 val specs2JunitDependency = "org.specs2" %% "specs2-junit" % specs2Version % "test"
 val specs2MockDependency = "org.specs2" %% "specs2-mock" % specs2Version % "test"
 val logbackDependency = "ch.qos.logback" % "logback-classic" % "1.1.6" % "test"
+val scalatest = "org.scalatest" % "scalatest_2.11" % "3.0.0-M2"
 
 val commonDependencies = Seq(
   "org.slf4j" % "slf4j-api" % "1.7.18",
@@ -19,10 +20,12 @@ val commonDependencies = Seq(
   "org.joda" % "joda-convert" % "1.8.1",
   "io.netty" % "netty-all" % "4.1.1.Final",
   "org.javassist" % "javassist" % "3.20.0-GA",
+  "com.typesafe" % "config" % "1.3.0",
   specs2Dependency,
   specs2JunitDependency,
   specs2MockDependency,
-  logbackDependency
+  logbackDependency,
+  scalatest
 )
 
 libraryDependencies ++= commonDependencies

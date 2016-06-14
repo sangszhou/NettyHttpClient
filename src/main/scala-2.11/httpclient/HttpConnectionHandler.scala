@@ -21,7 +21,7 @@ class HttpConnectionHandler(
                             configuration: Configuration,
                             group: EventLoopGroup,
                             executionContext: ExecutionContext,
-                            connectionId: String) extends SimpleChannelInboundHandler[HttpObject] {
+                            connectionId: String) extends SimpleChannelInboundHandler[HttpResponse] {
 
   private implicit val internalPool = executionContext
   private final val log = LoggerFactory.getLogger(s"[connection-handler]${connectionId}")
@@ -53,8 +53,12 @@ class HttpConnectionHandler(
     this.connectionPromise.future
   }
 
-  override def channelRead0(ctx: ChannelHandlerContext, msg: HttpObject): Unit = {
+  override def channelRead0(ctx: ChannelHandlerContext, msg: HttpResponse): Unit = {
 
+    log.info("msg received in http connection handler")
+    System.out.println("CONTENT_TYPE:" + msg.headers().get(HttpHeaders.Names.CONTENT_TYPE));
+
+    this.eventConnectionDelegate.onMessageReceived(msg)
   }
 
   override def channelActive(ctx: ChannelHandlerContext) = {
