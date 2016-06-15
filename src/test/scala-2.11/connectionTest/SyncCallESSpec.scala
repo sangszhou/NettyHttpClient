@@ -10,7 +10,7 @@ import util.{FutureUtils, GlobalConfig}
 /**
   * Created by xinszhou on 16/6/14.
   */
-class SyncCallES extends FunSuite {
+class SyncCallESSpec extends FunSuite {
 
   test("fetch meta info from es server") {
 
@@ -23,7 +23,7 @@ class SyncCallES extends FunSuite {
 
   //should throw exception
   test("send messages in parallel on one connection would throw exception") {
-    LocalESConnection.oneShort(connection => {
+    LocalESConnection.oneShoot(connection => {
       connection.sendQuery(HttpRequestFactory.getLocalESMeta)
       connection.sendQuery(HttpRequestFactory.getLocalESMeta)
     })
@@ -31,8 +31,9 @@ class SyncCallES extends FunSuite {
     Thread.sleep(3000)
   }
 
-  test("send multi message to connection, but only after the first") {
-    LocalESConnection.oneShort(connection => {
+  //should success
+  test("send multi message to connection, but only after the first response received") {
+    LocalESConnection.oneShoot(connection => {
       connection.sendQuery(HttpRequestFactory.getLocalESMeta)
       Thread.sleep(3000)
       connection.sendQuery(HttpRequestFactory.getLocalESMeta)

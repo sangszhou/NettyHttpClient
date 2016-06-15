@@ -11,7 +11,7 @@ import scala.concurrent.Future
 trait Connection {
   def disconnect: Future[Connection]
   def connect: Future[Connection]
-  def isConnect: Boolean
+  def isConnected: Boolean
   def sendQuery(query: HttpRequest): Future[HttpResponse]
 }
 

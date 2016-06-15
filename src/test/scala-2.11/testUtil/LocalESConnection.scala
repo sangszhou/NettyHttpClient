@@ -12,9 +12,11 @@ import scala.concurrent.Future
 object LocalESConnection {
 
   //@clear connection after using it
-  def oneShort(f: Connection => Unit) = {
+  def oneShoot(f: Connection => Unit) = {
     val connection = new HttpClientConnection(GlobalConfig.esServer)
     FutureUtils.awaitFuture(connection.connect)
-    f(connection)
+    try {
+      f(connection)
+    }
   }
 }

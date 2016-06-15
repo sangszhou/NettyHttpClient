@@ -8,6 +8,7 @@ import scala.concurrent.ExecutionContext
   * Created by xinszhou on 6/14/16.
   */
 object ExecutorServiceUtils {
+
   implicit val CachedThreadPool = Executors.newCachedThreadPool(DaemonThreadFactory("httpclient-netty"))
   implicit val CachedExecutionContext = ExecutionContext.fromExecutor(CachedThreadPool)
 

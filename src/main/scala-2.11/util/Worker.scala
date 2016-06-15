@@ -1,15 +1,29 @@
 package util
 
+import java.util.concurrent.ExecutorService
+
 import org.slf4j.LoggerFactory
 
-import scala.concurrent.ExecutionContextExecutorService
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService}
 
 /**
   * Created by xinszhou on 6/14/16.
+  *
+  *
+  * worker is used to sequelize http request, it works like lock
+  * worker is one, but available connections are many
+  *
   */
 
 object Worker {
   val log = LoggerFactory.getLogger(getClass)
+
+  def apply(): Worker = apply(ExecutorServiceUtils.newFixedPool(1, "worker-thread"))
+
+  def apply(executorService: ExecutorService): Worker = {
+    new Worker(ExecutionContext.fromExecutorService(executorService))
+  }
+
 }
 
 /**

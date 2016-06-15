@@ -19,7 +19,6 @@ object HttpClientConnection {
   final val log = LoggerFactory.getLogger(getClass)
 
   final val Counter = new AtomicLong()
-
 }
 
 class HttpClientConnection(
@@ -59,7 +58,7 @@ class HttpClientConnection(
     this.disconnectionPromise.future
   }
 
-  override def isConnect: Boolean = this.connected
+  override def isConnected: Boolean = this.connected
 
   override def sendQuery(query: HttpRequest): Future[HttpResponse] = {
     this.validateIsReadyForQuery
