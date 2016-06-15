@@ -17,11 +17,10 @@ object ConnectionPoolClient extends App {
   val factory = new HttpConnectionFactory(GlobalConfig.esServer)
   val connectionPool = new ConnectionPool[HttpConnection](factory)
 
-
   val threadList = new ListBuffer[Thread]
 
   var i = 0
-  while (i < 11) {
+  while (i < 500) {
     val thread: Thread = new Thread(new Runnable {
       override def run(): Unit = {
         val responseEntity = connectionPool.sendQuery(HttpRequestFactory.getLocalESMeta)
@@ -42,7 +41,4 @@ object ConnectionPoolClient extends App {
   val endTime = System.currentTimeMillis()
 
   println(s"time diff is: ${endTime - startTime}")
-
-
-
 }

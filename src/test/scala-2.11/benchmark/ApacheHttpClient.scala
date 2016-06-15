@@ -15,7 +15,7 @@ object ApacheHttpClient extends App {
 
   private val clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(HttpClientBuilder
     .create
-    .setMaxConnPerRoute(3)
+    .setMaxConnPerRoute(10)
     .setMaxConnTotal(100)
     .build)
 
@@ -23,7 +23,7 @@ object ApacheHttpClient extends App {
   val threadList = new ListBuffer[Thread]
 
   var i = 0
-  while (i < 1000) {
+  while (i < 500) {
     val thread: Thread = new Thread(new Runnable {
       override def run(): Unit = {
         val responseEntity = restTemplate.getForEntity(url, classOf[String])
@@ -33,7 +33,6 @@ object ApacheHttpClient extends App {
     threadList += thread
     i += 1
   }
-
 
   val startTime = System.currentTimeMillis()
 

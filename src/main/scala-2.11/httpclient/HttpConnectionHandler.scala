@@ -55,8 +55,8 @@ class HttpConnectionHandler(
 
   override def channelRead0(ctx: ChannelHandlerContext, msg: HttpResponse): Unit = {
 
-    log.info("msg received in http connection handler")
-    System.out.println("CONTENT_TYPE:" + msg.headers().get(HttpHeaders.Names.CONTENT_TYPE));
+//    log.info("msg received in http connection handler")
+//    System.out.println("CONTENT_TYPE:" + msg.headers().get(HttpHeaders.Names.CONTENT_TYPE));
 
     this.eventConnectionDelegate.onMessageReceived(msg)
   }

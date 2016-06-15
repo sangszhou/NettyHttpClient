@@ -64,7 +64,7 @@ class ObjectPool[T](
 
   //@todo wait queue size should be configurable
   private def enqueuePromise(promise: Promise[T]) = {
-    if (this.waitQueue.size >= 100) {
+    if (this.waitQueue.size >= 1000) {
       val exception = new Exception("Waiting queue is full")
       exception.printStackTrace()
       promise.tryFailure(exception)
