@@ -1,7 +1,7 @@
 package testUtil
 
 import common.Connection
-import httpclient.HttpClientConnection
+import httpclient.HttpConnection
 import util.{FutureUtils, GlobalConfig}
 
 import scala.concurrent.Future
@@ -13,7 +13,7 @@ object LocalESConnection {
 
   //@clear connection after using it
   def oneShoot(f: Connection => Unit) = {
-    val connection = new HttpClientConnection(GlobalConfig.esServer)
+    val connection = new HttpConnection(GlobalConfig.esServer)
     FutureUtils.awaitFuture(connection.connect)
     try {
       f(connection)

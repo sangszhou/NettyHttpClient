@@ -2,7 +2,7 @@ package connectionTest
 
 import com.typesafe.config.ConfigFactory
 import common.Configuration
-import httpclient.HttpClientConnection
+import httpclient.HttpConnection
 import org.scalatest.FunSuite
 import testUtil.{HttpRequestFactory, LocalESConnection}
 import util.{FutureUtils, GlobalConfig}
@@ -14,7 +14,7 @@ class SyncCallESSpec extends FunSuite {
 
   test("fetch meta info from es server") {
 
-    val connection = new HttpClientConnection(GlobalConfig.esServer)
+    val connection = new HttpConnection(GlobalConfig.esServer)
     FutureUtils.awaitFuture(connection.connect)
     connection.sendQuery(HttpRequestFactory.getLocalESMeta)
 
@@ -44,7 +44,7 @@ class SyncCallESSpec extends FunSuite {
 
   //don't know if this requirements is needed yet
   test("send messages in parallel, the second message will be abandoned, but the first one will not be affected") {
-
+    val data = GlobalConfig.config.getInt("num")
   }
 
 

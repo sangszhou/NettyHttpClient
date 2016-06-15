@@ -1,7 +1,7 @@
 package testUtil
 
 import common.Connection
-import httpclient.HttpClientConnection
+import httpclient.HttpConnection
 import pool.{HttpConnectionFactory, ConnectionPool}
 import util.GlobalConfig
 
@@ -10,10 +10,10 @@ import util.GlobalConfig
   */
 object LocalEsConnectionPool {
 
-  def pooledAction(f: ConnectionPool[HttpClientConnection] => Unit) = {
+  def pooledAction(f: ConnectionPool[HttpConnection] => Unit) = {
 
     val factory = new HttpConnectionFactory(GlobalConfig.esServer)
-    val connectionPool = new ConnectionPool[HttpClientConnection](factory)
+    val connectionPool = new ConnectionPool[HttpConnection](factory)
 
     f(connectionPool)
   }

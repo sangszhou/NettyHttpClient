@@ -3,6 +3,8 @@ package pool
 import util.Worker
 import java.util
 
+import org.slf4j.LoggerFactory
+
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, Queue, Stack}
 import scala.concurrent.{Future, Promise}
@@ -17,6 +19,8 @@ class ObjectPool[T](
                      factory: ObjectFactory[T]
                    ) extends AsyncObjectPool[T] {
 
+  final val log = LoggerFactory.getLogger(getClass)
+
   //defines how many concurrent tasks can be executed
   private val mainPool = Worker()
 
@@ -25,6 +29,7 @@ class ObjectPool[T](
 
   //store items that are doing query task
   private val checkouts = new ArrayBuffer[T](10)
+
   //available connections
   private val poolable = new Stack[T]()
 
@@ -51,7 +56,10 @@ class ObjectPool[T](
 
   //all available
   private def isFull: Boolean = {
-    this.poolable.isEmpty && this.checkouts.size == 10
+    val fullStatus = this.poolable.isEmpty && this.checkouts.size == 10
+
+
+    fullStatus
   }
 
   //@todo wait queue size should be configurable
@@ -74,6 +82,7 @@ class ObjectPool[T](
       }
     } else {
       val item: T = this.poolable.pop()
+      this.checkouts += item
       promise.success(item)
     }
   }
@@ -81,18 +90,23 @@ class ObjectPool[T](
   private def addBack(item: T, promise: Promise[AsyncObjectPool[T]]) = {
     this.poolable.push(item)
 
-    if (this.waitQueue.nonEmpty)
+    if (this.waitQueue.nonEmpty) {
       this.checkout(this.waitQueue.dequeue())
+    }
 
     promise.success(this)
   }
 
   override def giveBack(item: T): Future[AsyncObjectPool[T]] = {
+
     val promise = Promise[AsyncObjectPool[T]]
 
     this.mainPool.action {
+
       val idx = this.checkouts.indexOf(item)
+
       this.checkouts.remove(idx)
+
       this.factory.validate(item) match {
         case Success(item) => {
           this.addBack(item, promise)

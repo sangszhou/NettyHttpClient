@@ -21,6 +21,8 @@ val commonDependencies = Seq(
   "io.netty" % "netty-all" % "4.1.1.Final",
   "org.javassist" % "javassist" % "3.20.0-GA",
   "com.typesafe" % "config" % "1.3.0",
+  "org.apache.httpcomponents"        % "httpclient"                 %   "4.5.2",
+  "org.springframework"              % "spring-web"                 % "4.2.6.RELEASE",
   specs2Dependency,
   specs2JunitDependency,
   specs2MockDependency,

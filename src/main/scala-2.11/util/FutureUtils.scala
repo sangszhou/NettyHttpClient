@@ -7,6 +7,6 @@ import scala.concurrent.duration._
   */
 object FutureUtils {
   def awaitFuture[T]( future : Future[T] ) : T = {
-    Await.result(future, 5 seconds )
+    Await.result(future, 500 seconds )
   }
 }

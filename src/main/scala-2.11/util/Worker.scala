@@ -18,7 +18,7 @@ import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService}
 object Worker {
   val log = LoggerFactory.getLogger(getClass)
 
-  def apply(): Worker = apply(ExecutorServiceUtils.newFixedPool(1, "worker-thread"))
+  def apply(): Worker = apply(ExecutorServiceUtils.newFixedPool(1, "worker"))
 
   def apply(executorService: ExecutorService): Worker = {
     new Worker(ExecutionContext.fromExecutorService(executorService))
@@ -37,6 +37,7 @@ class Worker(val executionContextExecutorService: ExecutionContextExecutorServic
     this.executionContextExecutorService.execute(new Runnable {
       override def run(): Unit = {
         try {
+//          log.info("worker.action.run method f")
           f
         } catch {
           case e: Exception =>

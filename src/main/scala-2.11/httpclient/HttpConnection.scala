@@ -14,23 +14,22 @@ import scala.util.{Failure, Success}
 /**
   * Created by xinszhou on 6/14/16.
   */
-
-object HttpClientConnection {
+object HttpConnection {
   final val log = LoggerFactory.getLogger(getClass)
 
   final val Counter = new AtomicLong()
 }
 
-class HttpClientConnection(
-    configuration: Configuration,
-    group: EventLoopGroup = NettyUtils.DefaultEventLoopGroup,
-    implicit val executionContext: ExecutionContext = ExecutorServiceUtils.CachedExecutionContext)
-  extends Connection
-  with EventConnectionDelegate {
+class HttpConnection(
+                      configuration: Configuration,
+                      group: EventLoopGroup = NettyUtils.DefaultEventLoopGroup,
+                      implicit val executionContext: ExecutionContext = ExecutorServiceUtils.CachedExecutionContext)
 
-  import HttpClientConnection._
+  extends Connection with EventConnectionDelegate {
 
-  private final val connectionCount = HttpClientConnection.Counter.incrementAndGet()
+  import HttpConnection._
+
+  private final val connectionCount = HttpConnection.Counter.incrementAndGet()
   private final val connectionId = s"[http-connection-$connectionCount]"
   private final val connectionPromise = Promise[Connection]
   private final val disconnectionPromise = Promise[Connection]
@@ -39,17 +38,17 @@ class HttpClientConnection(
 
   private var connected = false
 
-  private final val connectionHandler = new HttpConnectionHandler (
+  private final val connectionHandler = new HttpConnectionHandler(
     this,
     configuration,
     group,
     executionContext,
     connectionId
-    )
+  )
 
   override def disconnect: Future[Connection] = {
     import util.ChannelFutureTransformer._
-    if(!this.connected) {
+    if (!this.connected) {
       this.connectionHandler.disconnect.onComplete {
         case Success(res) => this.disconnectionPromise.trySuccess(this)
         case Failure(exp) => this.disconnectionPromise.tryFailure(exp)
@@ -70,6 +69,7 @@ class HttpClientConnection(
 
   /**
     * where this value is set true?
+    *
     * @return
     */
   override def connect: Future[Connection] = {
@@ -90,19 +90,19 @@ class HttpClientConnection(
   }
 
   override def onMessageReceived(result: HttpResponse): Unit = {
-    log.info("message received")
+//    log.info("message received")
     succeedQueryPromise(result)
   }
 
   private def succeedQueryPromise(queryResult: HttpResponse) = {
-    log.info("successfully received message from server")
+//    log.info("successfully received message from server")
     this.clearQueryPromise.foreach {
       _.success(queryResult)
     }
   }
 
   private def validateIsReadyForQuery(): Unit = {
-    if(isQuerying()) throw new Exception("connection is in query, not ready yet")
+    if (isQuerying()) throw new Exception("connection is in query, not ready yet")
   }
 
   private def isQuerying() = {
@@ -114,6 +114,7 @@ class HttpClientConnection(
     if (!this.queryPromiseReference.compareAndSet(None, Some(promise)))
       throw new Exception("Query not returned yet exception")
   }
+
   private def clearQueryPromise: Option[Promise[HttpResponse]] = {
     this.queryPromiseReference.getAndSet(None)
   }

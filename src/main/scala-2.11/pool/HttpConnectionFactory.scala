@@ -1,10 +1,10 @@
 package pool
 
 import common.{Configuration, Connection}
-import httpclient.HttpClientConnection
+import httpclient.HttpConnection
 import org.slf4j.LoggerFactory
 import util.FutureUtils
-import scala.concurrent.duration._
+
 import scala.util.Try
 
 /**
@@ -15,17 +15,17 @@ object HttpConnectionFactory {
   final val log = LoggerFactory.getLogger(getClass)
 }
 
-class HttpConnectionFactory(configuration: Configuration) extends ObjectFactory[HttpClientConnection] {
+class HttpConnectionFactory(configuration: Configuration) extends ObjectFactory[HttpConnection] {
 
   import HttpConnectionFactory._
 
-  override def create: HttpClientConnection = {
-    val connection = new HttpClientConnection(configuration)
+  override def create: HttpConnection = {
+    val connection = new HttpConnection(configuration)
     FutureUtils.awaitFuture(connection.connect)
     connection
   }
 
-  override def destroy(item: HttpClientConnection): Unit =
+  override def destroy(item: HttpConnection): Unit =
     try {
     item.disconnect
   } catch {
@@ -33,7 +33,7 @@ class HttpConnectionFactory(configuration: Configuration) extends ObjectFactory[
       log.error("Failed to close the connection", e)
   }
 
-  override def validate(item: HttpClientConnection): Try[HttpClientConnection] = {
+  override def validate(item: HttpConnection): Try[HttpConnection] = {
     Try {
       if(!item.isConnected) {
         throw new Exception("Not connected")

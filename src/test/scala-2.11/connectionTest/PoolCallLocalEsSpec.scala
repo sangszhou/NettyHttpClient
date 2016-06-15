@@ -1,6 +1,6 @@
 package connectionTest
 
-import httpclient.HttpClientConnection
+import httpclient.HttpConnection$
 import org.scalatest.FunSuite
 import pool.ConnectionPool
 import testUtil.{HttpRequestFactory, LocalEsConnectionPool}
