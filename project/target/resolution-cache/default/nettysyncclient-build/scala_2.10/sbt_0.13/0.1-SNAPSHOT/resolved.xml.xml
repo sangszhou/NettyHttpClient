@@ -4,7 +4,7 @@
 		module="nettysyncclient-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20160614170000"
+		publication="20160615101512"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

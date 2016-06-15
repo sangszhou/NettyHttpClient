@@ -82,6 +82,7 @@ class HttpClientConnection(
 
   override def connected(ctx: ChannelHandlerContext): Unit = {
     log.debug("Connected to {}", ctx.channel.remoteAddress)
+    this.connectionPromise.trySuccess(this)
     this.connected = true
   }
 
