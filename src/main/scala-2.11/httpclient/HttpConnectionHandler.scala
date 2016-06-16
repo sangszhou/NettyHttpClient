@@ -38,7 +38,7 @@ class HttpConnectionHandler(
           new HttpClientCodec(),
           new HttpContentDecompressor(),
           new HttpObjectAggregator(512 * 1024),
-          HttpConnectionHandler.this) // 把自己加到里面去?
+          HttpConnectionHandler.this) // 把自己加到里面去
       }
 
     })

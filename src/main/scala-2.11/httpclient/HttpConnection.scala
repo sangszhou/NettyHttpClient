@@ -15,6 +15,7 @@ import scala.util.{Failure, Success}
   * Created by xinszhou on 6/14/16.
   */
 object HttpConnection {
+
   final val log = LoggerFactory.getLogger(getClass)
 
   final val Counter = new AtomicLong()

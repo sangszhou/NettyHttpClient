@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 case class DaemonThreadFactory(name: String) extends ThreadFactory{
 
   private val threadNumber = new AtomicInteger(1)
+
   override def newThread(runnable: Runnable): Thread = {
     val thread = Executors.defaultThreadFactory().newThread(runnable)
     thread.setDaemon(true)

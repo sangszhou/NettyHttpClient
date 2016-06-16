@@ -14,6 +14,11 @@ import scala.util.{Failure, Success}
   * Created by xinszhou on 6/15/16.
   *
   * be careful about concurrent actions
+  * make it thread safe
+  *
+  * @todo
+  * it use single threaded thread-pool to guarantee thread-safe, however, it's quite inefficient
+  * consider fine-grained lock to replace single-thread model
   */
 class ObjectPool[T](
                      factory: ObjectFactory[T]
@@ -34,7 +39,6 @@ class ObjectPool[T](
   private val poolable = new Stack[T]()
 
   private var closed = false
-
 
   override def take: Future[T] = {
     if(this.closed) {

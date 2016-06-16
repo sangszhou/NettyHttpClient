@@ -12,9 +12,9 @@ import scala.concurrent.{ExecutionContext, Future}
   * Created by xinszhou on 6/15/16.
   */
 class ConnectionPool[T <: Connection](
-                                           factory: ObjectFactory[T],
-                                           executionContext: ExecutionContext = ExecutorServiceUtils.CachedExecutionContext
-                                         )
+                                       factory: ObjectFactory[T],
+                                       executionContext: ExecutionContext = ExecutorServiceUtils.CachedExecutionContext
+                                     )
   extends ObjectPool[T](factory) with Connection {
 
 
@@ -24,9 +24,9 @@ class ConnectionPool[T <: Connection](
     } else Future.successful(this)
   }
 
-override def isConnected: Boolean = ! this.isClosed
+  override def isConnected: Boolean = !this.isClosed
 
-override def sendQuery (query: HttpRequest): Future[HttpResponse] = this.use(_.sendQuery(query))(executionContext)
+  override def sendQuery(query: HttpRequest): Future[HttpResponse] = this.use(_.sendQuery(query))(executionContext)
 
-override def connect: Future[Connection] = Future.successful(this)
+  override def connect: Future[Connection] = Future.successful(this)
 }
