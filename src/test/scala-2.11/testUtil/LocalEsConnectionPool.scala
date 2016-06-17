@@ -2,7 +2,7 @@ package testUtil
 
 import common.Connection
 import httpclient.HttpConnection
-import pool.{HttpConnectionFactory, ConnectionPool}
+import pool.{HttpConnectionFactory, ConnectionPoolThreadSafe}
 import util.GlobalConfig
 
 /**
@@ -10,10 +10,10 @@ import util.GlobalConfig
   */
 object LocalEsConnectionPool {
 
-  def pooledAction(f: ConnectionPool[HttpConnection] => Unit) = {
+  def pooledAction(f: ConnectionPoolThreadSafe[HttpConnection] => Unit) = {
 
     val factory = new HttpConnectionFactory(GlobalConfig.esServer)
-    val connectionPool = new ConnectionPool[HttpConnection](factory)
+    val connectionPool = new ConnectionPoolThreadSafe[HttpConnection](factory)
 
     f(connectionPool)
   }

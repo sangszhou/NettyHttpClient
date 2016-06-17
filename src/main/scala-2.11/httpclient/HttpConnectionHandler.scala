@@ -45,6 +45,8 @@ class HttpConnectionHandler(
 
     this.bootstrap.option[java.lang.Boolean](ChannelOption.SO_KEEPALIVE, true)
 
+
+    log.info(s"bootstrap trying to connect to remote address at time: ${System.currentTimeMillis()}")
     this.bootstrap.connect(new InetSocketAddress(configuration.host, configuration.port)).onFailure {
       case exception => this.connectionPromise.tryFailure(exception)
     }
@@ -58,11 +60,13 @@ class HttpConnectionHandler(
 //    log.info("msg received in http connection handler")
 //    System.out.println("CONTENT_TYPE:" + msg.headers().get(HttpHeaders.Names.CONTENT_TYPE));
 
+    log.info(s"message received at time: ${System.currentTimeMillis()}")
+
     this.eventConnectionDelegate.onMessageReceived(msg)
   }
 
   override def channelActive(ctx: ChannelHandlerContext) = {
-    log.debug("channel became active")
+    log.info(s"channel became active at time ${System.currentTimeMillis()}" )
     eventConnectionDelegate.connected(ctx)
   }
 

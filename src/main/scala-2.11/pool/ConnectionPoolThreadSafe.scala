@@ -11,11 +11,11 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
   * Created by xinszhou on 6/15/16.
   */
-class ConnectionPool[T <: Connection](
+class ConnectionPoolThreadSafe[T <: Connection](
                                        factory: ObjectFactory[T],
                                        executionContext: ExecutionContext = ExecutorServiceUtils.CachedExecutionContext
                                      )
-  extends ObjectPool[T](factory) with Connection {
+  extends ThreadSafeObjectPool[T](factory) with Connection {
 
 
   override def disconnect: Future[Connection] = {

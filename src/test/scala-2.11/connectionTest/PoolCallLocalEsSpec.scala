@@ -2,7 +2,7 @@ package connectionTest
 
 import httpclient.HttpConnection$
 import org.scalatest.FunSuite
-import pool.ConnectionPool
+import pool.ConnectionPoolThreadSafe
 import testUtil.{HttpRequestFactory, LocalEsConnectionPool}
 
 /**
@@ -23,6 +23,7 @@ class PoolCallLocalEsSpec extends FunSuite {
     LocalEsConnectionPool.pooledAction { pool =>
       pool.sendQuery(HttpRequestFactory.getLocalESMeta)
       pool.sendQuery(HttpRequestFactory.getLocalESMeta)
+
     }
 
     Thread.sleep(3000)

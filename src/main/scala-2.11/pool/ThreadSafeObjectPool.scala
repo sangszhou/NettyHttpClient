@@ -20,7 +20,7 @@ import scala.util.{Failure, Success}
   * it use single threaded thread-pool to guarantee thread-safe, however, it's quite inefficient
   * consider fine-grained lock to replace single-thread model
   */
-class ObjectPool[T](
+class ThreadSafeObjectPool[T](
                      factory: ObjectFactory[T]
                    ) extends AsyncObjectPool[T] {
 
