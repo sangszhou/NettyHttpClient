@@ -40,6 +40,7 @@ class ThreadSafeObjectPool[T](
 
   private var closed = false
 
+  //thread safe or not?
   override def take: Future[T] = {
     if(this.closed) {
       Promise.failed(new Exception("failed to take item from pool")).future
