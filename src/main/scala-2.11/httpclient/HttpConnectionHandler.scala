@@ -38,15 +38,15 @@ class HttpConnectionHandler(
           new HttpClientCodec(),
           new HttpContentDecompressor(),
           new HttpObjectAggregator(512 * 1024),
-          HttpConnectionHandler.this) // 把自己加到里面去
+          HttpConnectionHandler.this) // 把自己加到 handler 列表中
       }
-
     })
 
     this.bootstrap.option[java.lang.Boolean](ChannelOption.SO_KEEPALIVE, true)
 
 
     log.info(s"bootstrap trying to connect to remote address at time: ${System.currentTimeMillis()}")
+
     this.bootstrap.connect(new InetSocketAddress(configuration.host, configuration.port)).onFailure {
       case exception => this.connectionPromise.tryFailure(exception)
     }
@@ -60,7 +60,7 @@ class HttpConnectionHandler(
 //    log.info("msg received in http connection handler")
 //    System.out.println("CONTENT_TYPE:" + msg.headers().get(HttpHeaders.Names.CONTENT_TYPE));
 
-    log.info(s"message received at time: ${System.currentTimeMillis()}")
+//    log.info(s"message received at time: ${System.currentTimeMillis()}")
 
     this.eventConnectionDelegate.onMessageReceived(msg)
   }

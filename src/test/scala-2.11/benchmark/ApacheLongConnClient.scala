@@ -11,9 +11,35 @@ import scala.collection.mutable.ListBuffer
   */
 object ApacheLongConnClient extends App {
 
+  def startEndCounting = {
+    val threadList = new ListBuffer[Thread]
+
+    val startTime = System.currentTimeMillis()
+
+    var i = 0
+    while (i < 1000) {
+      val thread: Thread = new Thread(new Runnable {
+        override def run(): Unit = {
+          val responseEntity = restTemplate.getForEntity(url, classOf[String])
+        }
+      })
+
+      threadList += thread
+      i += 1
+    }
+
+    threadList.toList.foreach(_.start())
+    threadList.toList.foreach(_.join())
+
+    val endTime = System.currentTimeMillis()
+
+    println(s"time diff is: ${endTime - startTime}")
+
+
+  }
+
   val url = "http://localhost:9200"
 
-  val startTime = System.currentTimeMillis()
 
   private val clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
     HttpClientBuilder
@@ -23,27 +49,13 @@ object ApacheLongConnClient extends App {
       .build)
 
   val restTemplate = new RestTemplate(clientHttpRequestFactory)
-  val threadList = new ListBuffer[Thread]
-
-  var i = 0
-  while (i < 3) {
-    val thread: Thread = new Thread(new Runnable {
-      override def run(): Unit = {
-        val responseEntity = restTemplate.getForEntity(url, classOf[String])
-      }
-    })
-
-    threadList += thread
-    i += 1
-  }
 
 
+  println("begin warm up")
+  startEndCounting
+  println("warm up ends")
 
-  threadList.toList.foreach(_.start())
-  threadList.toList.foreach(_.join())
+  startEndCounting
 
-  val endTime = System.currentTimeMillis()
-
-  println(s"time diff is: ${endTime - startTime}")
 
 }

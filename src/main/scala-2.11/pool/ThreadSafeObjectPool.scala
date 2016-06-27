@@ -63,7 +63,6 @@ class ThreadSafeObjectPool[T](
   private def isFull: Boolean = {
     val fullStatus = this.poolable.isEmpty && this.checkouts.size == 10
 
-
     fullStatus
   }
 
